@@ -1,11 +1,11 @@
 # kopy
 
-kopy is a kubernetes operator that can sync configMap or secret objects to other namespaces within the cluster.
+kopy is a kubernetes operator that can sync ConfigMap or secret objects to other namespaces within the cluster.
 
 ## Getting Started
-The kopy operator runs a deployment on the kubernetes cluster.  It watches for configMap or secrets objects that contain annotations with the sync key `flynshue.io/sync`.
+The kopy operator runs a deployment on the kubernetes cluster.  It watches for ConfigMap or secrets objects that contain annotations with the sync key `flynshue.io/sync`.
 
-```yaml title="configMap/secret object annotations"
+```yaml title="ConfigMap/secret object annotations"
 metadata:
     annotations:
       flynshue.io/sync: app=test-config-00
