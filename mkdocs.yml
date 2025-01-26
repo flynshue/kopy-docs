@@ -18,6 +18,7 @@ theme:
     - content.code.copy
 nav:
   - Overview: index.md
+  - User Guide: user-guide.md
 plugins:
   - search:
 markdown_extensions:
