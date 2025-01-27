@@ -121,3 +121,43 @@ kind: List
 metadata:
   resourceVersion: ""
 ```
+
+## Tips
+
+### Deleting a source ConfigMap/Secret
+When you delete a ConfigMap/Secret object that contains an annotation with sync key `flynshue.io/sync`, the kopy operator will remove the finalizer from any copies of the object so that the copies of that object remain in their namespaces.
+
+This allows applications that are using copies of the object to continue to operate without disruption in the event that the source object was deleted by accident.
+
+### Deleting a copy object
+When you delete a ConfigMap/Secret object that resides in a namespace that contains a label that matches a source ConfigMap/Secret object, the kopy operator will re-sync the object back into the namespace.  In order to delete a copy of that object, you'll have to remove the label from the namespace and then remove the finalizer from the object copy.
+
+Remove label from namespace
+```yaml title="another-namespace.yaml" hl_lines="7"
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: another-namespace
+  labels:
+    app: fakesecret # remove this
+```
+
+Remove finalizer
+```yaml hl_lines="7-8"
+apiVersion: v1
+data:
+  key1: c3VwZXJzZWNyZXQ=
+kind: Secret
+metadata:
+  creationTimestamp: "2025-01-27T15:38:20Z"
+  finalizers: # remove this
+  - flynshue.io/finalizer # remove this
+  labels:
+    flynshue.io/origin.namespace: fake-secret-ns
+  name: fake-secret
+  namespace: another-namespace
+  resourceVersion: "1048"
+  uid: 7d035a18-7f50-4713-8166-c8d4fe32833d
+type: Opaque
+```
